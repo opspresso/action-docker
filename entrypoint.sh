@@ -1,19 +1,26 @@
 #!/bin/sh
 
+_error() {
+  echo -e "$1"
+
+  if [ ! -z "${LOOSE_ERROR}" ]; then
+    exit 0
+  else
+    exit 1
+  fi
+}
+
 _docker_pre() {
   if [ -z "${USERNAME}" ]; then
-    echo "DOCKER_USER is not set."
-    exit 1
+    _error "DOCKER_USER is not set."
   fi
 
   if [ -z "${PASSWORD}" ]; then
-    echo "PASSWORD is not set."
-    exit 1
+    _error "PASSWORD is not set."
   fi
 
   if [ -z "${IMAGE_NAME}" ]; then
-    echo "IMAGE_NAME is not set."
-    exit 1
+    _error "IMAGE_NAME is not set."
   fi
 
   if [ -z "${TAG_NAME}" ]; then
@@ -25,8 +32,7 @@ _docker_pre() {
       TAG_NAME=$(cat ./VERSION | xargs)
     fi
     if [ -z "${TAG_NAME}" ]; then
-      echo "TAG_NAME is not set."
-      exit 1
+      _error "TAG_NAME is not set."
     fi
   fi
 }
