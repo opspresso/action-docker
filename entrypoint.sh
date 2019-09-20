@@ -12,7 +12,7 @@ _error() {
 
 _docker_pre() {
   if [ -z "${USERNAME}" ]; then
-    _error "DOCKER_USER is not set."
+    _error "USERNAME is not set."
   fi
 
   if [ -z "${PASSWORD}" ]; then
