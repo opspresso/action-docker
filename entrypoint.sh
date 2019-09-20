@@ -34,16 +34,16 @@ _docker_pre() {
 _docker() {
     _docker_pre
 
-    _command "docker login -u ${USERNAME}"
+    echo "docker login -u ${USERNAME}"
     docker login -u ${USERNAME} -p ${PASSWORD}
 
-    _command "docker build -t ${IMAGE_NAME}:${TAG_NAME} ."
+    echo "docker build -t ${IMAGE_NAME}:${TAG_NAME} ."
     docker build -t ${IMAGE_NAME}:${TAG_NAME} .
 
-    _command "docker push ${IMAGE_NAME}:${TAG_NAME}"
+    echo "docker push ${IMAGE_NAME}:${TAG_NAME}"
     docker push ${IMAGE_NAME}:${TAG_NAME}
 
-    _command "docker logout"
+    echo "docker logout"
     docker logout
 }
 
