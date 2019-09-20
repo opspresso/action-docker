@@ -37,7 +37,7 @@ _docker() {
     _docker_pre
 
     echo "docker login -u ${USERNAME}"
-    docker login -u ${USERNAME} -p ${PASSWORD}
+    echo ${PASSWORD} | docker login -u ${USERNAME} --password-stdin
 
     echo "docker build -t ${IMAGE_NAME}:${TAG_NAME} ."
     docker build -t ${IMAGE_NAME}:${TAG_NAME} .
