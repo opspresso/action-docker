@@ -34,19 +34,27 @@ _docker_pre() {
 }
 
 _docker() {
-    _docker_pre
+  _docker_pre
 
-    echo "docker login -u ${USERNAME}"
-    echo ${PASSWORD} | docker login -u ${USERNAME} --password-stdin
+  echo "docker login -u ${USERNAME}"
+  echo ${PASSWORD} | docker login -u ${USERNAME} --password-stdin
 
-    echo "docker build -t ${IMAGE_NAME}:${TAG_NAME} ."
-    docker build -t ${IMAGE_NAME}:${TAG_NAME} .
+  echo "docker build -t ${IMAGE_NAME}:${TAG_NAME} ."
+  docker build -t ${IMAGE_NAME}:${TAG_NAME} .
 
-    echo "docker push ${IMAGE_NAME}:${TAG_NAME}"
-    docker push ${IMAGE_NAME}:${TAG_NAME}
+  echo "docker push ${IMAGE_NAME}:${TAG_NAME}"
+  docker push ${IMAGE_NAME}:${TAG_NAME}
 
-    echo "docker logout"
-    docker logout
+  if [ ! -z "${LATEST}" ]; then
+    echo "docker tag ${IMAGE_NAME}:latest"
+    docker tag ${IMAGE_NAME}:${TAG_NAME} ${IMAGE_NAME}:latest
+
+    echo "docker push ${IMAGE_NAME}:latest"
+    docker push ${IMAGE_NAME}:latest
+  fi
+
+  echo "docker logout"
+  docker logout
 }
 
 _docker
