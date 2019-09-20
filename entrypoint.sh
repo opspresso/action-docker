@@ -19,8 +19,15 @@ _docker_pre() {
   fi
 
   if [ -z "${TAG_NAME}" ]; then
-    echo "TAG_NAME is not set."
-    exit 1
+    if [ -f ./target/TAG_NAME ]; then
+      TAG_NAME=$(cat ./target/TAG_NAME | xargs)
+    elif [ -f ./target/VERSION ]; then
+      TAG_NAME=$(cat ./target/VERSION | xargs)
+    fi
+    if [ -z "${TAG_NAME}" ]; then
+      echo "TAG_NAME is not set."
+      exit 1
+    fi
   fi
 }
 

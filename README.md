@@ -32,4 +32,4 @@ Name | Description | Default | Required
 USERNAME | Your Docker Hub Username. | | **Yes**
 PASSWORD | Your Docker Hub Password. | | **Yes**
 IMAGE_NAME | Your Docker Image name. | | **Yes**
-TAG_NAME | Your Docker Tag name. | | **Yes**
+TAG_NAME | Your Docker Tag name. | $(cat ./target/TAG_NAME) | **Yes**
