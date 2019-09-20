@@ -1,7 +1,5 @@
 # Docker Push
 
-<a href="https://github.com/opspresso/action-docker"><img alt="GitHub Actions status" src="https://github.com/opspresso/action-docker/workflows/Build-Push/badge.svg"></a>
-
 ## Usage
 
 ```yaml
