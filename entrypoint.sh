@@ -1,7 +1,5 @@
 #!/bin/sh
 
-set -e
-
 _docker_pre() {
   if [ -z "${USERNAME}" ]; then
     echo "DOCKER_USER is not set."
