@@ -20,7 +20,8 @@ _docker_pre() {
   fi
 
   if [ -z "${IMAGE_NAME}" ]; then
-    _error "IMAGE_NAME is not set."
+    # _error "IMAGE_NAME is not set."
+    IMAGE_NAME="${GITHUB_REPOSITORY}"
   fi
 
   if [ -z "${TAG_NAME}" ]; then
