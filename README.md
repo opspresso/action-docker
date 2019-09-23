@@ -24,6 +24,17 @@ jobs:
           IMAGE_NAME: "user_id/image_name"
           TAG_NAME: "v0.0.1"
           LATEST: "true"
+
+      - name: Build & Push to AWS ECR
+        uses: opspresso/action-docker@master
+        with:
+          args: --ecr
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          IMAGE_URI: "xxxx.dkr.ecr.us-east-1.amazonaws.com/image_name"
+          TAG_NAME: "v0.0.1"
+          LATEST: "true"
 ```
 
 ## env
