@@ -10,5 +10,11 @@ LABEL repository="https://github.com/opspresso/action-docker"
 LABEL maintainer="Jungyoul Yu <me@nalbam.com>"
 LABEL homepage="https://opspresso.com/"
 
+RUN apk -v --update add bash curl python py-pip jq
+
+RUN pip install --upgrade awscli python-magic && \
+    apk -v --purge del py-pip && \
+    rm /var/cache/apk/*
+
 ADD entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
