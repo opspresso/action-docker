@@ -1,4 +1,4 @@
-FROM docker
+FROM opspresso/builder:v0.6.4
 
 LABEL "com.github.actions.name"="Docker Push"
 LABEL "com.github.actions.description"="build, tag and pushes the container"
@@ -9,12 +9,6 @@ LABEL version=v0.1.2
 LABEL repository="https://github.com/opspresso/action-docker"
 LABEL maintainer="Jungyoul Yu <me@nalbam.com>"
 LABEL homepage="https://opspresso.com/"
-
-RUN apk -v --update add bash curl python py-pip jq
-
-RUN pip install --upgrade awscli python-magic && \
-    apk -v --purge del py-pip && \
-    rm /var/cache/apk/*
 
 ADD entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
