@@ -21,12 +21,20 @@ _ecr_pre() {
     _error "AWS_SECRET_ACCESS_KEY is not set."
   fi
 
-  if [ -z "${AWS_ACCOUNT_ID}" ]; then
-    AWS_ACCOUNT_ID="$(aws sts get-caller-identity | grep "Account" | cut -d'"' -f4)"
-  fi
-
   if [ -z "${AWS_REGION}" ]; then
     AWS_REGION="us-east-1"
+  fi
+
+  # aws credentials
+  aws configure <<-EOF > /dev/null 2>&1
+${AWS_ACCESS_KEY_ID}
+${AWS_SECRET_ACCESS_KEY}
+${AWS_REGION}
+text
+EOF
+
+  if [ -z "${AWS_ACCOUNT_ID}" ]; then
+    AWS_ACCOUNT_ID="$(aws sts get-caller-identity | grep "Account" | cut -d'"' -f4)"
   fi
 
   if [ -z "${IMAGE_NAME}" ]; then
@@ -53,13 +61,6 @@ _ecr_pre() {
 
 _ecr() {
   _ecr_pre
-
-  aws configure <<-EOF > /dev/null 2>&1
-${AWS_ACCESS_KEY_ID}
-${AWS_SECRET_ACCESS_KEY}
-${AWS_REGION}
-text
-EOF
 
   echo "aws ecr get-login --no-include-email"
   aws ecr get-login --no-include-email | sh
