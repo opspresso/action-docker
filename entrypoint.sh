@@ -12,7 +12,7 @@ _error() {
   fi
 }
 
-_ecr_pre() {
+_aws_pre() {
   if [ -z "${AWS_ACCESS_KEY_ID}" ]; then
     _error "AWS_ACCESS_KEY_ID is not set."
   fi
@@ -32,6 +32,10 @@ ${AWS_SECRET_ACCESS_KEY}
 ${AWS_REGION}
 text
 EOF
+}
+
+_ecr_pre() {
+  _aws_pre
 
   if [ -z "${AWS_ACCOUNT_ID}" ]; then
     AWS_ACCOUNT_ID="$(aws sts get-caller-identity | grep "Account" | cut -d'"' -f4)"
