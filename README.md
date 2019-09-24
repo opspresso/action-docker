@@ -53,7 +53,7 @@ Name | Description | Default | Required
 ---- | ----------- | ------- | --------
 AWS_ACCESS_KEY_ID | Your AWS Access Key. | | **Yes**
 AWS_SECRET_ACCESS_KEY | Your AWS Secret Access Key. | | **Yes**
-AWS_ACCOUNT_ID | Your AWS Account ID. | $(aws sts get-caller-identity | grep "Account") | No
+AWS_ACCOUNT_ID | Your AWS Account ID. | $(aws sts get-caller-identity) | No
 AWS_REGION | Your AWS Region. | us-east-1 | No
 IMAGE_NAME | Your Docker Image name. | ${GITHUB_REPOSITORY} | No
 TAG_NAME | Your Docker Tag name. | $(cat ./target/TAG_NAME) | No
