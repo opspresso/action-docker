@@ -21,12 +21,12 @@ _ecr_pre() {
     _error "AWS_SECRET_ACCESS_KEY is not set."
   fi
 
-  if [ -z "${AWS_REGION}" ]; then
-    AWS_REGION="us-east-1"
-  fi
-
   if [ -z "${AWS_ACCOUNT_ID}" ]; then
     AWS_ACCOUNT_ID="$(aws sts get-caller-identity | grep "Account" | cut -d'"' -f4)"
+  fi
+
+  if [ -z "${AWS_REGION}" ]; then
+    AWS_REGION="us-east-1"
   fi
 
   if [ -z "${IMAGE_NAME}" ]; then
