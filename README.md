@@ -59,4 +59,5 @@ AWS_ACCOUNT_ID | Your AWS Account ID. | $(aws sts get-caller-identity) | No
 IMAGE_NAME | Your Docker Image name. | ${GITHUB_REPOSITORY} | No
 IMAGE_URI | Your Docker Image uri. | ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${IMAGE_NAME} | No
 TAG_NAME | Your Docker Tag name. | $(cat ./target/TAG_NAME) | No
+IMAGE_TAG_MUTABILITY | The tag mutability setting for the repository. | MUTABLE | No
 LATEST | Use latest tag name. | false | No
