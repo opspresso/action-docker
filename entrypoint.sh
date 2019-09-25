@@ -2,6 +2,11 @@
 
 CMD="$1"
 
+REPOSITORY=${GITHUB_REPOSITORY}
+
+USERNAME=${USERNAME:-$GITHUB_ACTOR}
+REPONAME=$(echo "${REPOSITORY}" | cut -d'/' -f2)
+
 _error() {
   echo -e "$1"
 
