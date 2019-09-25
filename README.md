@@ -25,6 +25,16 @@ jobs:
           TAG_NAME: "v0.0.1"
           LATEST: "true"
 
+      - name: Build & Push to GitHub Package
+        uses: opspresso/action-docker@master
+        env:
+          USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          REGISRTY: "docker.pkg.github.com"
+          # IMAGE_NAME: "user_id/image_name"
+          TAG_NAME: "v0.0.1"
+          LATEST: "true"
+
       - name: Build & Push to AWS ECR
         uses: opspresso/action-docker@master
         with:
@@ -38,17 +48,18 @@ jobs:
           LATEST: "true"
 ```
 
-## env for docker
+## env for Docker Hub
 
 Name | Description | Default | Required
 ---- | ----------- | ------- | --------
 USERNAME | Your Docker Hub Username. | | **Yes**
 PASSWORD | Your Docker Hub Password. | | **Yes**
+REGISTRY |  | | No
 IMAGE_NAME | Your Docker Image name. | ${GITHUB_REPOSITORY} | No
 TAG_NAME | Your Docker Tag name. | $(cat ./target/TAG_NAME) | No
 LATEST | Use latest tag name. | false | No
 
-## env for ecr
+## env for AWS ECR
 
 Name | Description | Default | Required
 ---- | ----------- | ------- | --------
