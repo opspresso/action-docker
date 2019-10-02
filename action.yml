@@ -21,13 +21,13 @@ inputs:
   #   default: 'World'
 
   # BUILD_PATH:
-  #   description: 'Your Docker Registry Uri.'
+  #   description: 'The path where the Dockerfile.'
   #   required: false
   #   default: '.'
 
 outputs:
-  image:
-    description: 'Your Docker Image.'
+  TAG_NAME:
+    description: 'Your Docker Tag name.'
 
 runs:
   using: 'docker'

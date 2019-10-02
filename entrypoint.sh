@@ -179,3 +179,5 @@ case "${CMD:2}" in
   *)
     _error
 esac
+
+echo ::set-output name=TAG_NAME::${TAG_NAME}
