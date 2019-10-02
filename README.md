@@ -55,6 +55,7 @@ Name | Description | Default | Required
 USERNAME | Your Docker Hub Username. | ${GITHUB_ACTOR} | No
 PASSWORD | Your Docker Hub Password. | | **Yes**
 REGISTRY | Your Docker Registry Uri. | | No
+BUILD_PATH | The path where the Dockerfile. | . | No
 IMAGE_NAME | Your Docker Image name. | ${GITHUB_REPOSITORY} | No
 TAG_NAME | Your Docker Tag name. | $(cat ./target/TAG_NAME) | No
 LATEST | Use latest tag name. | false | No
