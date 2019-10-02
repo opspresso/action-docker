@@ -1,7 +1,10 @@
 name: 'Docker Push'
 description: 'build, tag and pushes the container'
-icon: 'anchor'
-color: 'blue'
+author: 'Jungyoul Yu <@nalbam>'
+
+branding:
+  icon: 'anchor'
+  color: 'blue'
 
 inputs:
   registry-type:
