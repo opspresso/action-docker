@@ -1,4 +1,4 @@
-# Docker Push
+# Docker Push Action
 
 ## Usage
 
