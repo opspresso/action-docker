@@ -1,5 +1,8 @@
 # Docker Push Action
 
+[![GitHub Actions status](https://github.com/opspresso/action-docker/workflows/Build-Push/badge.svg)](https://github.com/opspresso/action-docker/actions)
+[![GitHub Releases](https://img.shields.io/github/release/opspresso/action-docker.svg)](https://github.com/opspresso/action-docker/releases)
+
 ## Usage
 
 ```yaml
