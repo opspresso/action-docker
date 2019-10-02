@@ -1,5 +1,7 @@
 name: 'Docker Push'
 description: 'build, tag and pushes the container'
+icon: 'anchor'
+color: 'blue'
 
 inputs:
   registry-type:
