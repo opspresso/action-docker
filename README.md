@@ -24,7 +24,7 @@ jobs:
         env:
           USERNAME: ${{ secrets.DOCKER_USERNAME }}
           PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-          # IMAGE_NAME: "user_id/image_name"
+          IMAGE_NAME: "user_id/image_name"
           TAG_NAME: "v0.0.1"
           LATEST: "true"
 
@@ -34,7 +34,7 @@ jobs:
           USERNAME: ${{ secrets.GITHUB_USERNAME }}
           PASSWORD: ${{ secrets.GITHUB_PERSONAL_TOKEN }}
           REGISTRY: "docker.pkg.github.com"
-          # IMAGE_NAME: "user_id/image_name"
+          IMAGE_NAME: "user_id/image_name"
           TAG_NAME: "v0.0.1"
           LATEST: "true"
 
@@ -45,8 +45,7 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: "us-east-1"
-          # IMAGE_NAME: "user_id/image_name"
+          IMAGE_URI: "xxxx.dkr.ecr.us-east-1.amazonaws.com/image_name"
           TAG_NAME: "v0.0.1"
           LATEST: "true"
 ```
