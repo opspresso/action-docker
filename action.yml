@@ -1,30 +1,26 @@
-name: 'Docker Push'
-description: 'build, tag and pushes the container'
-author: 'Jungyoul Yu <@nalbam>'
+name: "Docker Push"
+description: "build, tag and pushes the container"
+author: "Jungyoul Yu <@nalbam>"
 
 branding:
-  icon: 'anchor'
-  color: 'blue'
+  icon: "anchor"
+  color: "blue"
 
 inputs:
   registry-type:
-    description: 'Your Docker Registry Type.'
+    description: "Your Docker Registry Type."
     required: false
-    default: '--docker'
-
+    default: "--docker"
   # USERNAME:
   #   description: 'Your Docker Hub Username.'
   #   required: true
-
   # PASSWORD:
   #   description: 'Your Docker Hub Password.'
   #   required: true
-
   # REGISTRY:
   #   description: 'Your Docker Registry Uri.'
   #   required: false
   #   default: 'World'
-
   # BUILD_PATH:
   #   description: 'The path where the Dockerfile.'
   #   required: false
@@ -32,10 +28,10 @@ inputs:
 
 outputs:
   TAG_NAME:
-    description: 'Your Docker Tag name.'
+    description: "Your Docker Tag name."
 
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
+  using: "docker"
+  image: "Dockerfile"
   args:
     - ${{ inputs.registry-type }}
