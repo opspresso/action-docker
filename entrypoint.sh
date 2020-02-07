@@ -17,6 +17,14 @@ _error() {
   fi
 }
 
+_error_check() {
+  RESULT=$?
+
+  if [ ${RESULT} != 0 ]; then
+    _error ${RESULT}
+  fi
+}
+
 _aws_pre() {
   if [ -z "${AWS_ACCESS_KEY_ID}" ]; then
     _error "AWS_ACCESS_KEY_ID is not set."
@@ -63,8 +71,12 @@ _docker_push() {
   echo "docker build -t ${IMAGE_URI_TAG} ${BUILD_PATH}"
   docker build -t ${IMAGE_URI_TAG} ${BUILD_PATH}
 
+  _error_check
+
   echo "docker push ${IMAGE_URI_TAG}"
   docker push ${IMAGE_URI_TAG}
+
+  _error_check
 
   if [ "${LATEST}" == "true" ]; then
     IMAGE_URI_LATEST="$(_docker_image_uri_tag latest)"
@@ -111,6 +123,8 @@ _docker() {
   echo "docker login ${REGISTRY} -u ${USERNAME}"
   echo ${PASSWORD} | docker login ${REGISTRY} -u ${USERNAME} --password-stdin
 
+  _error_check
+
   _docker_push
 
   echo "docker logout"
@@ -156,6 +170,8 @@ EOF
 
   echo "aws ecr get-login --no-include-email"
   aws ecr get-login --no-include-email | sh
+
+  _error_check
 
   COUNT=$(aws ecr describe-repositories | jq '.repositories[] | .repositoryName' | grep "\"${IMAGE_NAME}\"" | wc -l | xargs)
   if [ "x${COUNT}" == "x0" ]; then
