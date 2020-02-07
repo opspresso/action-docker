@@ -24,7 +24,7 @@ jobs:
         env:
           USERNAME: ${{ secrets.DOCKER_USERNAME }}
           PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-          IMAGE_NAME: "user_id/image_name"
+          IMAGE_NAME: "USERNAME/IMAGE_NAME"
           TAG_NAME: "v0.0.1"
           LATEST: "true"
 
@@ -34,7 +34,7 @@ jobs:
           USERNAME: ${{ secrets.GITHUB_USERNAME }}
           PASSWORD: ${{ secrets.GITHUB_PERSONAL_TOKEN }}
           REGISTRY: "docker.pkg.github.com"
-          IMAGE_NAME: "user_id/image_name"
+          IMAGE_NAME: "IMAGE_NAME"
           TAG_NAME: "v0.0.1"
           LATEST: "true"
 
