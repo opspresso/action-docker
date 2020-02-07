@@ -45,7 +45,7 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          IMAGE_URI: "xxxx.dkr.ecr.us-east-1.amazonaws.com/image_name"
+          IMAGE_URI: "xxxx.dkr.ecr.us-east-1.amazonaws.com/IMAGE_NAME"
           TAG_NAME: "v0.0.1"
           LATEST: "true"
 ```
