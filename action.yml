@@ -6,6 +6,12 @@ branding:
   icon: "anchor"
   color: "blue"
 
+runs:
+  using: "docker"
+  image: "docker://opspresso/action-docker:v0.2.6"
+  args:
+    - ${{ inputs.registry-type }}
+
 inputs:
   registry-type:
     description: "Your Docker Registry Type."
@@ -29,9 +35,3 @@ inputs:
 outputs:
   TAG_NAME:
     description: "Your Docker Tag name."
-
-runs:
-  using: "docker"
-  image: "Dockerfile"
-  args:
-    - ${{ inputs.registry-type }}
