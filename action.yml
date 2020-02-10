@@ -7,8 +7,8 @@ branding:
   color: "blue"
 
 runs:
-  using: "docker"
-  image: "docker://opspresso/action-docker:v0.2.6"
+  using: docker
+  image: docker://opspresso/action-docker:v0.2.6
   args:
     - ${{ inputs.registry-type }}
 
