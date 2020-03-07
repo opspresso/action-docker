@@ -63,7 +63,7 @@ PASSWORD | Your Docker Hub Password. | | **Yes**
 REGISTRY | Your Docker Registry Uri. | | No
 BUILD_PATH | The path where the Dockerfile. | . | No
 IMAGE_NAME | Your Docker Image name. | ${GITHUB_REPOSITORY} | No
-TAG_NAME | Your Docker Tag name. | $(cat ./target/TAG_NAME) | No
+TAG_NAME | Your Docker Tag name. | $(cat ./target/TAG_NAME) if the file exists, or `latest` instead | No
 LATEST | Use latest tag name. | false | No
 
 ## env for AWS ECR
@@ -77,6 +77,6 @@ AWS_ACCOUNT_ID | Your AWS Account ID. | $(aws sts get-caller-identity) | No
 BUILD_PATH | The path where the Dockerfile. | . | No
 IMAGE_NAME | Your Docker Image name. | ${GITHUB_REPOSITORY} | No
 IMAGE_URI | Your Docker Image uri. | ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${IMAGE_NAME} | No
-TAG_NAME | Your Docker Tag name. | $(cat ./target/TAG_NAME) | No
+TAG_NAME | Your Docker Tag name. | $(cat ./target/TAG_NAME) if the file exists, or `latest` instead | No
 IMAGE_TAG_MUTABILITY | The tag mutability setting for the repository. | MUTABLE | No
 LATEST | Use latest tag name. | false | No

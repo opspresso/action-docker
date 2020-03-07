@@ -49,7 +49,7 @@ _docker_tag() {
       TAG_NAME=$(cat ./VERSION | xargs)
     fi
     if [ -z "${TAG_NAME}" ]; then
-      _error "TAG_NAME is not set."
+      TAG_NAME="latest"
     fi
   fi
   if [ ! -z "${TAG_POST}" ]; then
