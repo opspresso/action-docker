@@ -38,6 +38,7 @@ jobs:
           USERNAME: ${{ secrets.GITHUB_USERNAME }}
           PASSWORD: ${{ secrets.GITHUB_PERSONAL_TOKEN }}
           REGISTRY: "docker.pkg.github.com"
+          DOCKERFILE: "Dockerfile"
           IMAGE_NAME: "IMAGE_NAME"
           TAG_NAME: "v0.0.1"
           LATEST: "true"
@@ -50,6 +51,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           IMAGE_URI: "xxxx.dkr.ecr.us-east-1.amazonaws.com/IMAGE_NAME"
+          DOCKERFILE: "Dockerfile.aws"
           TAG_NAME: "v0.0.1"
           LATEST: "true"
 ```
@@ -62,8 +64,9 @@ USERNAME | Your Docker Hub Username. | ${GITHUB_ACTOR} | No
 PASSWORD | Your Docker Hub Password. | | **Yes**
 REGISTRY | Your Docker Registry Uri. | | No
 BUILD_PATH | The path where the Dockerfile. | . | No
+DOCKERFILE | The Dockerfile name. | Dockerfile | No
 IMAGE_NAME | Your Docker Image name. | ${GITHUB_REPOSITORY} | No
-TAG_NAME | Your Docker Tag name. | $(cat ./target/TAG_NAME) | No
+TAG_NAME | Your Docker Tag name. | $(cat ./target/TAG_NAME) if the file exists, or `latest` instead | No
 LATEST | Use latest tag name. | false | No
 
 ## env for AWS ECR
@@ -75,8 +78,9 @@ AWS_SECRET_ACCESS_KEY | Your AWS Secret Access Key. | | **Yes**
 AWS_REGION | Your AWS Region. | us-east-1 | No
 AWS_ACCOUNT_ID | Your AWS Account ID. | $(aws sts get-caller-identity) | No
 BUILD_PATH | The path where the Dockerfile. | . | No
+DOCKERFILE | The Dockerfile name. | Dockerfile | No
 IMAGE_NAME | Your Docker Image name. | ${GITHUB_REPOSITORY} | No
 IMAGE_URI | Your Docker Image uri. | ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${IMAGE_NAME} | No
-TAG_NAME | Your Docker Tag name. | $(cat ./target/TAG_NAME) | No
+TAG_NAME | Your Docker Tag name. | $(cat ./target/TAG_NAME) if the file exists, or `latest` instead | No
 IMAGE_TAG_MUTABILITY | The tag mutability setting for the repository. | MUTABLE | No
 LATEST | Use latest tag name. | false | No
