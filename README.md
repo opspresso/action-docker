@@ -19,18 +19,19 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Build & Push to Docker Hub
+      - name: Docker Build & Push to Docker Hub
         uses: opspresso/action-docker@master
         with:
           args: --docker
         env:
           USERNAME: ${{ secrets.DOCKER_USERNAME }}
           PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          DOCKERFILE: "Dockerfile"
           IMAGE_NAME: "USERNAME/IMAGE_NAME"
           TAG_NAME: "v0.0.1"
           LATEST: "true"
 
-      - name: Build & Push to GitHub Package
+      - name: Docker Build & Push to GitHub Package
         uses: opspresso/action-docker@master
         with:
           args: --docker
@@ -43,7 +44,7 @@ jobs:
           TAG_NAME: "v0.0.1"
           LATEST: "true"
 
-      - name: Build & Push to AWS ECR
+      - name: Docker Build & Push to AWS ECR
         uses: opspresso/action-docker@master
         with:
           args: --ecr
