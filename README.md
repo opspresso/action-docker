@@ -22,7 +22,7 @@ jobs:
       - name: Docker Build & Push to Docker Hub
         uses: opspresso/action-docker@master
         with:
-          args: --docker
+          registry-type: --docker
         env:
           USERNAME: ${{ secrets.DOCKER_USERNAME }}
           PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
@@ -34,7 +34,7 @@ jobs:
       - name: Docker Build & Push to GitHub Package
         uses: opspresso/action-docker@master
         with:
-          args: --docker
+          registry-type: --docker
         env:
           USERNAME: ${{ secrets.GITHUB_USERNAME }}
           PASSWORD: ${{ secrets.GITHUB_PERSONAL_TOKEN }}
@@ -47,7 +47,7 @@ jobs:
       - name: Docker Build & Push to AWS ECR
         uses: opspresso/action-docker@master
         with:
-          args: --ecr
+          registry-type: --ecr
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
