@@ -40,6 +40,10 @@ _aws_pre() {
 }
 
 _docker_tag() {
+  if [ ! -z "${TAG_NAME}" ]; then
+    TAG_NAME=${TAG_NAME##*/}
+  fi
+
   if [ -z "${TAG_NAME}" ]; then
     if [ -f ./target/TAG_NAME ]; then
       TAG_NAME=$(cat ./target/TAG_NAME | xargs)
@@ -52,6 +56,7 @@ _docker_tag() {
       TAG_NAME="latest"
     fi
   fi
+
   if [ ! -z "${TAG_POST}" ]; then
     TAG_NAME="${TAG_NAME}-${TAG_POST}"
   fi
