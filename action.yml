@@ -8,29 +8,7 @@ branding:
 
 runs:
   using: docker
-  image: docker://opspresso/action-docker:v0.2.9
-  args:
-    - ${{ inputs.registry-type }}
-
-inputs:
-  registry-type:
-    description: "Your Docker Registry Type."
-    required: false
-    default: "--docker"
-  # USERNAME:
-  #   description: 'Your Docker Hub Username.'
-  #   required: true
-  # PASSWORD:
-  #   description: 'Your Docker Hub Password.'
-  #   required: true
-  # REGISTRY:
-  #   description: 'Your Docker Registry Uri.'
-  #   required: false
-  #   default: 'World'
-  # BUILD_PATH:
-  #   description: 'The path where the Dockerfile.'
-  #   required: false
-  #   default: '.'
+  image: docker://opspresso/action-docker:v0.2.10
 
 outputs:
   TAG_NAME:
