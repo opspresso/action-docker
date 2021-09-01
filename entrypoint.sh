@@ -88,7 +88,7 @@ _docker_tag() {
   fi
 }
 
-_docker_push() {
+_docker_build() {
   _command "docker build ${DOCKER_BUILD_ARGS} -t ${IMAGE_URI}:${TAG_NAME} -f ${DOCKERFILE} ${BUILD_PATH}"
   docker build ${DOCKER_BUILD_ARGS} -t ${IMAGE_URI}:${TAG_NAME} -f ${DOCKERFILE} ${BUILD_PATH}
 
@@ -105,6 +105,68 @@ _docker_push() {
 
     _command "docker push ${IMAGE_URI}:latest"
     docker push ${IMAGE_URI}:latest
+  fi
+}
+
+_docker_builds() {
+  TAG_NAMES=""
+
+  ARR=(${PLATFORM//,/ })
+
+  for V in ${ARR[@]}; do
+      P="${V//\//-}"
+
+      _command "docker build ${DOCKER_BUILD_ARGS} --build-arg ARCH=${V} -t ${IMAGE_URI}:${TAG_NAME}-${P} -f ${DOCKERFILE} ${BUILD_PATH}"
+      docker build ${DOCKER_BUILD_ARGS} --build-arg ARCH=${V} -t ${IMAGE_URI}:${TAG_NAME}-${P} -f ${DOCKERFILE} ${BUILD_PATH}
+
+      _error_check
+
+      _command "docker push ${IMAGE_URI}:${TAG_NAME}-${P}"
+      docker push ${IMAGE_URI}:${TAG_NAME}-${P}
+
+      _error_check
+
+      TAG_NAMES="${TAG_NAMES},${IMAGE_URI}:${TAG_NAME}-${P}"
+  done
+
+  _docker_manifest ${TAG_NAME} "${TAG_NAMES:1}"
+
+  if [ "${LATEST}" == "true" ]; then
+    _docker_manifest latest "${TAG_NAMES:1}"
+  fi
+}
+
+_docker_manifest() {
+  _command "docker manifest create ${IMAGE_URI}:${1} ${2}"
+  docker manifest create ${IMAGE_URI}:${1} ${2}
+
+  _error_check
+
+  _command "docker manifest inspect ${IMAGE_URI}:${1}"
+  docker manifest inspect ${IMAGE_URI}:${1}
+
+  _command "docker manifest push ${IMAGE_URI}:${1}"
+  docker manifest push ${IMAGE_URI}:${1}
+}
+
+_docker_buildx() {
+  if [ -z "${PLATFORM}" ]; then
+    PLATFORM="linux/arm64,linux/amd64"
+  fi
+
+  _command "docker buildx create --use --name opspresso"
+  docker buildx create --use --name opspresso
+
+  _command "docker buildx build ${DOCKER_BUILD_ARGS} -t ${IMAGE_URI}:${TAG_NAME} -f ${DOCKERFILE} ${BUILD_PATH}"
+  docker buildx build --push ${DOCKER_BUILD_ARGS} -t ${IMAGE_URI}:${TAG_NAME} ${BUILD_PATH} -f ${DOCKERFILE} --platform ${PLATFORM}
+
+  _error_check
+
+  _command "docker buildx imagetools inspect ${IMAGE_URI}:${TAG_NAME}"
+  docker buildx imagetools inspect ${IMAGE_URI}:${TAG_NAME}
+
+  if [ "${LATEST}" == "true" ]; then
+    _docker_manifest latest ${IMAGE_URI}:${TAG_NAME}
   fi
 }
 
@@ -125,13 +187,17 @@ _docker_pre() {
     DOCKERFILE="Dockerfile"
   fi
 
+  if [ -z "${IMAGE_NAME}" ]; then
+    IMAGE_NAME="${REPOSITORY}"
+  fi
+
   if [ -z "${IMAGE_URI}" ]; then
     if [ -z "${REGISTRY}" ]; then
-      IMAGE_URI="${IMAGE_NAME:-${REPOSITORY}}"
+      IMAGE_URI="${IMAGE_NAME}"
     elif [ "${REGISTRY}" == "docker.pkg.github.com" ]; then
-      IMAGE_URI="${REGISTRY}/${REPOSITORY}/${IMAGE_NAME:-${REPONAME}}"
+      IMAGE_URI="${REGISTRY}/${REPOSITORY}/${IMAGE_NAME}"
     else
-      IMAGE_URI="${REGISTRY}/${IMAGE_NAME:-${REPOSITORY}}"
+      IMAGE_URI="${REGISTRY}/${IMAGE_NAME}"
     fi
   fi
 
@@ -146,7 +212,15 @@ _docker() {
 
   _error_check
 
-  _docker_push
+  if [ "${BUILDX}" == "true" ]; then
+    _docker_buildx
+  else
+    if [ "${PLATFORM}" == "" ]; then
+      _docker_build
+    else
+      _docker_builds
+    fi
+  fi
 
   _command "docker logout"
   docker logout
@@ -171,8 +245,12 @@ _docker_ecr_pre() {
     IMAGE_NAME="${REPOSITORY}"
   fi
 
+  if [ -z "${REGISTRY}" ]; then
+    REGISTRY="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
+  fi
+
   if [ -z "${IMAGE_URI}" ]; then
-    IMAGE_URI="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${IMAGE_NAME}"
+    IMAGE_URI="${REGISTRY}/${IMAGE_NAME}"
   fi
 
   _docker_tag
@@ -193,12 +271,15 @@ ${AWS_REGION}
 text
 EOF
 
-  # https://docs.aws.amazon.com/cli/latest/reference/ecr/get-login.html
-  # _command "aws ecr get-login --no-include-email"
-  # aws ecr get-login --no-include-email | sh
+  PUBLIC=$(echo ${REGISTRY} | cut -d'.' -f1)
 
-  _command "aws ecr get-login-password ${AWS_ACCOUNT_ID} ${AWS_REGION}"
-  aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/
+  if [ "${PUBLIC}" == "public" ]; then
+    _command "aws ecr-public get-login-password --region ${AWS_REGION} ${REGISTRY}"
+    aws ecr-public get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${REGISTRY}
+  else
+    _command "aws ecr get-login-password --region ${AWS_REGION} ${REGISTRY}"
+    aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${REGISTRY}
+  fi
 
   _error_check
 
@@ -208,7 +289,15 @@ EOF
     aws ecr create-repository --repository-name ${IMAGE_NAME} --image-tag-mutability ${IMAGE_TAG_MUTABILITY}
   fi
 
-  _docker_push
+  if [ "${BUILDX}" == "true" ]; then
+    _docker_buildx
+  else
+    if [ "${PLATFORM}" == "" ]; then
+      _docker_build
+    else
+      _docker_builds
+    fi
+  fi
 }
 
 if [ -z "${CMD}" ]; then

@@ -30,6 +30,7 @@ jobs:
           IMAGE_NAME: "USERNAME/IMAGE_NAME"
           TAG_NAME: "v0.0.1"
           LATEST: "true"
+          BUILDX: "true"
 
       - name: Docker Build & Push to GitHub Package
         uses: opspresso/action-docker@master
@@ -55,7 +56,9 @@ jobs:
           DOCKERFILE: "Dockerfile.aws"
           TAG_NAME: "v0.0.1"
           LATEST: "true"
+          BUILDX: "true"
 ```
+
 ## Common env
 
 Name | Description | Default | Required
