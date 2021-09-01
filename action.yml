@@ -8,7 +8,7 @@ branding:
 
 runs:
   using: docker
-  image: docker://opspresso/action-docker:v0.3.4
+  image: docker://opspresso/action-docker:v0.3.5
 
 outputs:
   TAG_NAME:
