@@ -154,8 +154,10 @@ _docker_buildx() {
     PLATFORM="linux/arm64,linux/amd64"
   fi
 
-  _command "docker buildx create --use --name opspresso"
-  docker buildx create --use --name opspresso
+  PLACE=$(date +%s)
+
+  _command "docker buildx create --use --name ops-${PLACE}"
+  docker buildx create --use --name ops-${PLACE}
 
   _command "docker buildx build ${DOCKER_BUILD_ARGS} -t ${IMAGE_URI}:${TAG_NAME} -f ${DOCKERFILE} ${BUILD_PATH}"
   docker buildx build --push ${DOCKER_BUILD_ARGS} -t ${IMAGE_URI}:${TAG_NAME} ${BUILD_PATH} -f ${DOCKERFILE} --platform ${PLATFORM}
