@@ -31,6 +31,7 @@ jobs:
           TAG_NAME: "v0.0.1"
           LATEST: "true"
           BUILDX: "true"
+          PLATFORM: "linux/amd64,linux/arm64"
 
       - name: Docker Build & Push to GitHub Package
         uses: opspresso/action-docker@master
@@ -57,6 +58,7 @@ jobs:
           TAG_NAME: "v0.0.1"
           LATEST: "true"
           BUILDX: "true"
+          PLATFORM: "linux/amd64,linux/arm64"
 ```
 
 ## Common env
@@ -69,6 +71,8 @@ DOCKERFILE | The Dockerfile name. | Dockerfile | No
 IMAGE_NAME | Your Docker Image name. | ${GITHUB_REPOSITORY} | No
 TAG_NAME | Your Docker Tag name. | $(cat ./target/TAG_NAME) if the file exists, or `latest` instead | No
 LATEST | Use latest tag name. | false | No
+BUILDX | Use docker buildx. | false | No
+PLATFORM | Architecture list. Used with buildx. | linux/amd64,linux/arm64 | No
 
 ## env for Docker Hub
 
