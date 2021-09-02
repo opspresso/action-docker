@@ -32,7 +32,6 @@ jobs:
           PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
           TAG_NAME: "v0.0.1"
           BUILDX: "true"
-          # LATEST: "true"
 
       - name: Build & Push to Quay.io
         uses: opspresso/action-docker@master
@@ -44,7 +43,6 @@ jobs:
           REGISTRY: "quay.io"
           TAG_NAME: "v0.0.1"
           BUILDX: "true"
-          # LATEST: "true"
 
       - name: Build & Push to GitHub Package
         uses: opspresso/action-docker@master
@@ -54,7 +52,6 @@ jobs:
           PASSWORD: ${{ secrets.GHP_TOKEN }}
           REGISTRY: "docker.pkg.github.com"
           TAG_NAME: "v0.0.1"
-          # LATEST: "true"
 
       - name: Build & Push to AWS ECR Private
         uses: opspresso/action-docker@master
@@ -66,7 +63,6 @@ jobs:
           AWS_REGION: "ap-northeast-2"
           TAG_NAME: "v0.0.1"
           BUILDX: "true"
-          # LATEST: "true"
 
       - name: Build & Push to AWS ECR Public
         uses: opspresso/action-docker@master
@@ -79,7 +75,6 @@ jobs:
           REGISTRY: "public.ecr.aws/nalbam"
           TAG_NAME: "v0.0.1"
           BUILDX: "true"
-          # LATEST: "true"
 ```
 
 ## Common env
