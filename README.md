@@ -31,7 +31,18 @@ jobs:
           USERNAME: ${{ secrets.DOCKER_USERNAME }}
           PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
           TAG_NAME: "v0.0.1"
-          # PLATFORM: "linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6"
+          BUILDX: "true"
+          # LATEST: "true"
+
+      - name: Build & Push to Quay.io
+        uses: opspresso/action-docker@master
+        with:
+          args: --docker
+        env:
+          USERNAME: ${{ secrets.QUAY_USERNAME }}
+          PASSWORD: ${{ secrets.QUAY_PASSWORD }}
+          REGISTRY: "quay.io"
+          TAG_NAME: "v0.0.1"
           BUILDX: "true"
           # LATEST: "true"
 
@@ -54,7 +65,6 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_BRUCE }}
           AWS_REGION: "ap-northeast-2"
           TAG_NAME: "v0.0.1"
-          # PLATFORM: "linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6"
           BUILDX: "true"
           # LATEST: "true"
 
@@ -68,7 +78,6 @@ jobs:
           AWS_REGION: "ap-northeast-2"
           REGISTRY: "public.ecr.aws/nalbam"
           TAG_NAME: "v0.0.1"
-          # PLATFORM: "linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6"
           BUILDX: "true"
           # LATEST: "true"
 ```
