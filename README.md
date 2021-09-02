@@ -8,7 +8,11 @@
 ```yaml
 name: Docker Push
 
-on: push
+on:
+  push:
+    branches:
+      - main
+      - master
 
 jobs:
   docker:
@@ -19,46 +23,54 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Docker Build & Push to Docker Hub
+      - name: Build & Push to Docker Hub
         uses: opspresso/action-docker@master
         with:
           args: --docker
         env:
           USERNAME: ${{ secrets.DOCKER_USERNAME }}
           PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-          DOCKERFILE: "Dockerfile"
-          IMAGE_NAME: "USERNAME/IMAGE_NAME"
           TAG_NAME: "v0.0.1"
-          LATEST: "true"
+          # PLATFORM: "linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6"
           BUILDX: "true"
-          PLATFORM: "linux/amd64,linux/arm64"
+          # LATEST: "true"
 
-      - name: Docker Build & Push to GitHub Package
+      - name: Build & Push to GitHub Package
         uses: opspresso/action-docker@master
         with:
           args: --docker
         env:
-          USERNAME: ${{ secrets.GITHUB_USERNAME }}
-          PASSWORD: ${{ secrets.GH_PERSONAL_TOKEN }}
+          PASSWORD: ${{ secrets.GHP_TOKEN }}
           REGISTRY: "docker.pkg.github.com"
-          DOCKERFILE: "Dockerfile"
-          IMAGE_NAME: "IMAGE_NAME"
           TAG_NAME: "v0.0.1"
-          LATEST: "true"
+          # LATEST: "true"
 
-      - name: Docker Build & Push to AWS ECR
+      - name: Build & Push to AWS ECR Private
+        uses: opspresso/action-docker@master
+        with:
+          args: --ecr
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_BRUCE }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_BRUCE }}
+          AWS_REGION: "ap-northeast-2"
+          TAG_NAME: "v0.0.1"
+          # PLATFORM: "linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6"
+          BUILDX: "true"
+          # LATEST: "true"
+
+      - name: Build & Push to AWS ECR Public
         uses: opspresso/action-docker@master
         with:
           args: --ecr
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          IMAGE_URI: "xxxx.dkr.ecr.us-east-1.amazonaws.com/IMAGE_NAME"
-          DOCKERFILE: "Dockerfile.aws"
+          AWS_REGION: "ap-northeast-2"
+          REGISTRY: "public.ecr.aws/nalbam"
           TAG_NAME: "v0.0.1"
-          LATEST: "true"
+          # PLATFORM: "linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6"
           BUILDX: "true"
-          PLATFORM: "linux/amd64,linux/arm64"
+          # LATEST: "true"
 ```
 
 ## Common env
@@ -68,6 +80,7 @@ Name | Description | Default | Required
 BUILD_PATH | The path where the Dockerfile. | . | No
 DOCKER_BUILD_ARGS | Build args passed to Docker. | | No
 DOCKERFILE | The Dockerfile name. | Dockerfile | No
+REGISTRY | Your Docker Registry Uri. | | No
 IMAGE_NAME | Your Docker Image name. | ${GITHUB_REPOSITORY} | No
 TAG_NAME | Your Docker Tag name. | $(cat ./target/TAG_NAME) if the file exists, or `latest` instead | No
 LATEST | Use latest tag name. | false | No
@@ -80,7 +93,6 @@ Name | Description | Default | Required
 ---- | ----------- | ------- | --------
 USERNAME | Your Docker Hub Username. | ${GITHUB_ACTOR} | No
 PASSWORD | Your Docker Hub Password. | | **Yes**
-REGISTRY | Your Docker Registry Uri. | | No
 
 ## env for AWS ECR
 
