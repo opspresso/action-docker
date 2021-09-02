@@ -195,11 +195,12 @@ _docker_pre() {
 
   if [ -z "${IMAGE_URI}" ]; then
     if [ -z "${REGISTRY}" ]; then
-      IMAGE_URI="${IMAGE_NAME}"
+      IMAGE_URI="${IMAGE_NAME:-$REPOSITORY}"
     elif [ "${REGISTRY}" == "docker.pkg.github.com" ]; then
-      IMAGE_URI="${REGISTRY}/${REPOSITORY}/${IMAGE_NAME}"
+      # :owner/:repo_name/:image_name
+      IMAGE_URI="${REGISTRY}/${REPOSITORY}/${IMAGE_NAME:-$REPONAME}"
     else
-      IMAGE_URI="${REGISTRY}/${IMAGE_NAME}"
+      IMAGE_URI="${REGISTRY}/${IMAGE_NAME:-$REPOSITORY}"
     fi
   fi
 
@@ -280,8 +281,6 @@ ${AWS_REGION}
 text
 EOF
 
-  PUBLIC=$(echo ${REGISTRY} | cut -d'.' -f1)
-
   if [ "${PUBLIC}" == "public" ]; then
     _command "aws ecr-public get-login-password --region us-east-1 ${REGISTRY}"
     aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${REGISTRY}
@@ -292,7 +291,13 @@ EOF
 
   _error_check
 
-  if [ "${PUBLIC}" != "public" ]; then
+  if [ "${PUBLIC}" == "public" ]; then
+    COUNT=$(aws ecr-public describe-repositories --region us-east-1 --output json | jq '.repositories[] | .repositoryName' | grep "\"${IMAGE_NAME}\"" | wc -l | xargs)
+    if [ "x${COUNT}" == "x0" ]; then
+      _command "aws ecr-public create-repository ${IMAGE_NAME}"
+      aws ecr create-repository --repository-name ${IMAGE_NAME} --region us-east-1
+    fi
+  else
     COUNT=$(aws ecr describe-repositories --output json | jq '.repositories[] | .repositoryName' | grep "\"${IMAGE_NAME}\"" | wc -l | xargs)
     if [ "x${COUNT}" == "x0" ]; then
       _command "aws ecr create-repository ${IMAGE_NAME}"
