@@ -1,6 +1,7 @@
 # Docker Push Action
 
-[![GitHub Actions status](https://github.com/opspresso/action-docker/workflows/Build-Push/badge.svg)](https://github.com/opspresso/action-docker/actions)
+[![Build-Tag](https://github.com/opspresso/action-docker/actions/workflows/tag.yml/badge.svg)](https://github.com/opspresso/action-docker/actions/workflows/tag.yml)
+[![Build-Cron](https://github.com/opspresso/action-docker/actions/workflows/cron.yaml/badge.svg)](https://github.com/opspresso/action-docker/actions/workflows/cron.yaml)
 [![GitHub Releases](https://img.shields.io/github/release/opspresso/action-docker.svg)](https://github.com/opspresso/action-docker/releases)
 
 ## Usage
