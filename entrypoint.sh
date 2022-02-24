@@ -7,7 +7,7 @@ REPOSITORY=${GITHUB_REPOSITORY}
 USERNAME=${USERNAME:-$GITHUB_ACTOR}
 REPONAME=$(echo "${REPOSITORY}" | cut -d'/' -f2)
 
-command -v tput > /dev/null && TPUT=true
+command -v tput >/dev/null && TPUT=true
 
 _echo() {
   if [ "${TPUT}" != "" ] && [ "$2" != "" ]; then
@@ -85,6 +85,19 @@ _docker_tag() {
 
   if [ ! -z "${TAG_POST}" ]; then
     TAG_NAME="${TAG_NAME}-${TAG_POST}"
+  fi
+}
+
+_docker_file() {
+  if [ -z "${DOCKERFILE}" ]; then
+    DOCKERFILE="Dockerfile"
+    if [ ! -f ${DOCKERFILE} ]; then
+      if [ ! -z "${BASE_IMAGE}" ]; then
+        echo "FROM ${BASE_IMAGE}:${TAG_NAME}" >${DOCKERFILE}
+      else
+        _error "${DOCKERFILE} not found."
+      fi
+    fi
   fi
 }
 
@@ -173,6 +186,8 @@ _docker_buildx() {
 }
 
 _docker_pre() {
+  _docker_tag
+
   if [ -z "${USERNAME}" ]; then
     _error "USERNAME is not set."
   fi
@@ -185,9 +200,7 @@ _docker_pre() {
     BUILD_PATH="."
   fi
 
-  if [ -z "${DOCKERFILE}" ]; then
-    DOCKERFILE="Dockerfile"
-  fi
+  _docker_file
 
   if [ -z "${IMAGE_NAME}" ]; then
     if [ "${REGISTRY}" == "docker.pkg.github.com" ]; then
@@ -207,8 +220,6 @@ _docker_pre() {
       IMAGE_URI="${REGISTRY}/${IMAGE_NAME}"
     fi
   fi
-
-  _docker_tag
 }
 
 _docker() {
@@ -237,6 +248,8 @@ _docker() {
 _docker_ecr_pre() {
   _aws_pre
 
+  _docker_tag
+
   if [ -z "${AWS_ACCOUNT_ID}" ]; then
     AWS_ACCOUNT_ID="$(aws sts get-caller-identity --output json | jq '.Account' -r)"
   fi
@@ -245,9 +258,7 @@ _docker_ecr_pre() {
     BUILD_PATH="."
   fi
 
-  if [ -z "${DOCKERFILE}" ]; then
-    DOCKERFILE="Dockerfile"
-  fi
+  _docker_file
 
   if [ -z "${REGISTRY}" ]; then
     REGISTRY="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
@@ -267,8 +278,6 @@ _docker_ecr_pre() {
     IMAGE_URI="${REGISTRY}/${IMAGE_NAME}"
   fi
 
-  _docker_tag
-
   if [ "${IMAGE_TAG_MUTABILITY}" != "IMMUTABLE" ]; then
     IMAGE_TAG_MUTABILITY="MUTABLE"
   fi
@@ -278,7 +287,7 @@ _docker_ecr() {
   _docker_ecr_pre
 
   # aws credentials
-  aws configure <<-EOF > /dev/null 2>&1
+  aws configure <<-EOF >/dev/null 2>&1
 ${AWS_ACCESS_KEY_ID}
 ${AWS_SECRET_ACCESS_KEY}
 ${AWS_REGION}
@@ -328,14 +337,15 @@ fi
 _result "[${CMD:2}] start..."
 
 case "${CMD:2}" in
-  docker)
-    _docker
-    ;;
-  ecr)
-    _docker_ecr
-    ;;
-  *)
-    _error
+docker)
+  _docker
+  ;;
+ecr)
+  _docker_ecr
+  ;;
+*)
+  _error
+  ;;
 esac
 
 echo ::set-output name=TAG_NAME::${TAG_NAME}
