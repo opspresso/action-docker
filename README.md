@@ -59,8 +59,8 @@ jobs:
         with:
           args: --ecr
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_BRUCE }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_BRUCE }}
+          # AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          # AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: "ap-northeast-2"
           TAG_NAME: "v0.0.1"
           BUILDX: "true"
@@ -70,8 +70,8 @@ jobs:
         with:
           args: --ecr
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          # AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          # AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: "ap-northeast-2"
           REGISTRY: "public.ecr.aws/nalbam"
           TAG_NAME: "v0.0.1"
@@ -103,8 +103,8 @@ PASSWORD | Your Docker Hub Password. | | **Yes**
 
 Name | Description | Default | Required
 ---- | ----------- | ------- | --------
-AWS_ACCESS_KEY_ID | Your AWS Access Key. | | **Yes**
-AWS_SECRET_ACCESS_KEY | Your AWS Secret Access Key. | | **Yes**
+AWS_ACCESS_KEY_ID | Your AWS Access Key. | | No
+AWS_SECRET_ACCESS_KEY | Your AWS Secret Access Key. | | No
 AWS_REGION | Your AWS Region. | us-east-1 | No
 AWS_ACCOUNT_ID | Your AWS Account ID. | $(aws sts get-caller-identity) | No
 IMAGE_URI | Your Docker Image uri. | ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${IMAGE_NAME} | No

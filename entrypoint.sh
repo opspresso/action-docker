@@ -52,12 +52,18 @@ _error_check() {
 }
 
 _aws_pre() {
-  if [ -z "${AWS_ACCESS_KEY_ID}" ]; then
-    _error "AWS_ACCESS_KEY_ID is not set."
-  fi
+  # if [ -z "${AWS_ACCESS_KEY_ID}" ]; then
+  #   _error "AWS_ACCESS_KEY_ID is not set."
+  # fi
 
-  if [ -z "${AWS_SECRET_ACCESS_KEY}" ]; then
-    _error "AWS_SECRET_ACCESS_KEY is not set."
+  # if [ -z "${AWS_SECRET_ACCESS_KEY}" ]; then
+  #   _error "AWS_SECRET_ACCESS_KEY is not set."
+  # fi
+
+  AWS_ACCOUNT_ID="$(aws sts get-caller-identity --output json | jq '.Account' -r)"
+
+  if [ -z "${AWS_ACCOUNT_ID}" ]; then
+    _error "AWS_ACCOUNT_ID is not set."
   fi
 
   if [ -z "${AWS_REGION}" ]; then
@@ -249,10 +255,6 @@ _docker_ecr_pre() {
   _aws_pre
 
   _docker_tag
-
-  if [ -z "${AWS_ACCOUNT_ID}" ]; then
-    AWS_ACCOUNT_ID="$(aws sts get-caller-identity --output json | jq '.Account' -r)"
-  fi
 
   if [ -z "${BUILD_PATH}" ]; then
     BUILD_PATH="."
